@@ -1,0 +1,52 @@
+A simple file with writeble to reinforce my study.
+
+Run Docker intance: 
+
+$sudo systemctl docker status
+	- if it is running, run the command for start that container that have
+	  it the database:
+
+$sudo docker start mariadb1
+	- aftar start the container, the prompt will shown "mariadb1", which
+	  means the server is online. Now you can access de comand line inside
+of database. Juas run the command as follow. 
+
+$sudo docker exec -it mariadb1 -mysql -u saul -p
+	- after inform the password you already conected with the server.
+
+$sudo docker exec -it mariadb1 bash
+	- makes you access the bash of container and run commands like "mysql",
+	  "mysqldump", "apt-get".
+
+To connect with the server using an IP conection, use this command:
+$ sudo docker inspect -f '{{range
+.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mariadb1
+
+Then you get the IP adrees and connect using the follow command:
+$mysql -h 172.17.0.2 -u saul -p
+
+
+First STATEMENTS in MariaDB:
+
+	Try the next commands:
+
+> SHOW DATABASE;
+	- Show existent databases.
+
+> USE database_name;
+	- Select one database.
+
+> SHOW TABLES;
+	- Display all tables which is in the  database.
+
+> 
+
+
+
+Backup a table:
+$ sudo docker exec -it mariadb1 mysqldump --user 'saul' -p \ rookery birds >
+~/Documents/Data/Study/IT/Develop/Database/birds.sql
+	- The "\" tells the shell to that have it more is to follow,
+	- The ">" tells the shell to that send the results of the tump to a text
+	  file called birds.sql in the chosen folder.
+
