@@ -1,0 +1,183 @@
+Python Data Types
+
+numeric
+iterator
+sequence (which are also iterators)
+mapping
+file
+class
+exception
+
+
+Stings -> str
+
+Numerics ->	int
+		float
+		complex
+
+Stings -->	The Sting Type
+		list
+		tuple
+		range
+		bytes and bytearray
+
+Slice:
+
+
+Replace fields:
+
+
+Senquence
+	Not all sequence types can be concatenated or multiplied. "range" is a example of sequence that can't be concatenated.
+			
+
+F-strings:
+	Format strings, make Strings concatenate numbers with words.
+
+# d% --> interger
+# f% --> float
+# s% --> string
+# r% --> raw
+
+Intall pip
+
+sudo easy_install pip3
+
+
+Install Numpy
+
+pip3 install numpy
+
+
+The conversion types are:
+
+Conversion	Meaning	Notes
+d	Signed integer decimal.	
+i	Signed integer decimal.	
+o	Unsigned octal.	(1)
+u	Unsigned decimal.	
+x	Unsigned hexadecimal (lowercase).	(2)
+X	Unsigned hexadecimal (uppercase).	(2)
+e	Floating point exponential format (lowercase).	
+E	Floating point exponential format (uppercase).	
+f	Floating point decimal format.	
+F	Floating point decimal format.	
+g	Same as "e" if exponent is greater than -4 or less than precision, "f" otherwise.	
+G	Same as "E" if exponent is greater than -4 or less than precision, "F" otherwise.	
+c	Single character (accepts integer or single character string).	
+r	String (converts any python object using repr()).	(3)
+s	String (converts any python object using str()).	(4)
+%	No argument is converted, results in a "%" character in the result.	
+Notes:(1)
+The alternate form causes a leading zero ("0") to be inserted between left-hand padding and the formatting of the number if the leading character of the result is not already a zero.
+(2)
+The alternate form causes a leading '0x' or '0X' (depending on whether the "x" or "X" format was used) to be inserted between left-hand padding and the formatting of the number if the leading character of the result is not already a zero.
+(3)
+The %r conversion was added in Python 2.0.
+(4)
+If the object or format provided is a unicode string, the resulting string will also be unicode.
+Since Python strings have an explicit length, %s conversions do not assume that '\0' is the end of the string.
+
+For safety reasons, floating point precisions are clipped to 50; %f conversions for numbers whose absolute value is over 1e25 are replaced by %g conversions.2.9 All other errors raise exceptions.
+
+Additional string operations are defined in standard modules string and re.
+
+
+Conditional Operators:
+
+== equal to
+Else after elif
+< less than
+<= less than ou equal to
+> Greater than
+>= Greater than or equal to
+Not equal to !=
+And
+Or
+
+Boolean Expressions
+
+Exemple:
+
+if day == "Saturday" and temperature > 27 and not raining:
+	print("Go swimming")
+
+Not -> can use not to reverse a Boolean value.
+Not True is False
+Not True is True
+
+*** Any object can be tested for truth value, for use in an if or while condition or as operand of the Boolean operations below. ***
+
+
+Python provides several ways to repeat a block of code - things like:
+
+* for (loops)
+* while (loops)
+* list comprehensions and generators expressions
+
+- Sometimes we need to keeping looping as long as some condition in True, and stop when it becomes False.
+We do this using a while loop.
+
+
+Links Python Documentation:
+
+Built-in Functions:
+https://docs.python.org/3/library/functions.html
+
+Functions: (len)
+https://docs.python.org/3/library/functions.html#len
+
+Types of variables:
+https://docs.python.org/3/library/stdtypes.html
+
+Operator precedence: (Logicals)
+https://docs.python.org/3/reference/expressions.html#operator-precedence
+
+String Methods:
+https://docs.python.org/3/library/stdtypes.html
+
+Expressions
+https://docs.python.org/3/reference/expressions.html
+https://docs.python.org/3/reference/expressions.html#operator-precedence
+
+
+Binary search formula:
+Low + (high - low) // 2
+
+
+Best Practices:
+https://www.python.org/dev/peps/pep-0008/
+https://www.python.org/dev/peps/pep-0013/
+
+Sequences: 
+https://docs.python.org/3/library/stdtypes.html#sequence-types-list-tuple-range
+	Is a ordered collection of items. The word ordered there is important. If a sequence wasn’t ordered, you couldn’t refer to individual items by their index position.
+
+Iterables:
+	In Python, anything that you can iterate over is an iterable. That means that if you can use it in a for loop, then it’s iterable.
+	Indexing must also start from zero.
+	Alli sequence types can be iterated over. That means all sequence types - strings, list, etc. are also iterable types. Not all iterables are sequences. For example, you can use a dictionary in a for loop, but it’s not a sequence.
+	
+Ummmutable objects:
+The following immutables types are built into Python:
+	* int
+	* float
+	* bool (true and false): a subclass in int
+	* str (string)
+	* tuple
+	* frozenset
+	* bytes
+
+Mutable Objects: 
+Can be:
+	* lists
+	* dict
+	* set
+	* Bytearray
+	
+* Method - is the same as a function, except that it's bound to a object. That means we need an object, in order to call the method.
+Exemple: s.append(x) - means that we'll be appending x to a list called s,
+
+
+
+

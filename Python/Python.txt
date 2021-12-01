@@ -1,0 +1,39 @@
+Python
+
+Comando print de variáveis:
+
+print('A raiz quadrada foi {:.3f} e a raiz cúbica foi {:.3f}'.format(raizQ, raizC))
+
+h    = float(input('Entre com a altura do cilindro: ')) ; V = Ab * h
+
+h = float (input('Entre com a altura do cilindro: ')) ; Al = 2* π * r* h ; At = 2 * Ab + Al; At
+
+
+>>> π
+3.1415
+>>> r = 2
+>>> Ab = π * r ** 2
+>>> Ab
+12.566
+>>> h = 3
+>>> Al - 2 * π * r * h
+Traceback (most recent call last):
+    File "<pyshell#8>", line 1, in <module>
+        Al - 2 * π * r * h
+NameError: name 'Al' is not defined
+>>> Al = 2 * π * r * h
+>>> Al
+37.698
+>>> V = Ab * h
+>>> V
+37.698
+>>> At = 2 * Ab + Al
+>>> al
+Traceback (most recent call last):
+    File "<pyshell#14>", line 1, in <module>
+        al
+NameError: name 'al' is not defined
+>>> Al
+37.698
+>>> At
+62.83

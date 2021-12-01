@@ -1,0 +1,210 @@
+A simple file with writeble to reinforce my study.
+
+Run Docker instance: 
+
+$sudo systemctl docker status
+	- if it is running, run the command for start that container that have
+	  it the database:
+
+$sudo docker start mariadb1
+	- aftar start the container, the prompt will shown "mariadb1", which
+	  means the server is online. Now you can access de comand line inside
+	  of database. Juas run the command as follow. 
+
+$sudo docker exec -it mariadb1 -mysql -u saul -p
+	- after inform the password you already conected with the server.
+
+$sudo docker exec -it mariadb1 bash
+	- makes you access the bash of container and run commands like "mysql",
+	  "mysqldump", "apt-get".
+
+To connect with the server using an IP conection, use this command:
+$ sudo docker inspect -f '{{range
+.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mariadb1
+
+Then you get the IP adrees and connect using the follow command:
+$mysql -h 172.17.0.2 -u saul -p
+
+
+First STATEMENTS in MariaDB:
+
+	Try the next commands:
+
+> SHOW DATABASE;
+	- Show existent databases.
+
+> USE database_name;
+	- Select one database.
+
+> SHOW TABLES;
+	- Display all tables which is in the  database.
+
+> SHOW CREATE TABLE table_name;
+	- Display details from table
+
+> DESCRIBE table_name;
+	- Display datails from table in a better way, more plesant view.
+
+		Chapter 5: 
+
+Backup a table:
+$mysqldump --user 'saul' -p \ 
+rookery table_name > /tmp/table_name.sql
+	- The "\" tells the shell to that have it more is to follow,
+	- The ">" tells the shell to that send the results of the dump to a text
+	  file called birds.sql in the chosen folder.
+
+Backup a database:
+$mysqldump --user 'saul' -p \
+rookery > /tmp/rookery-ch4-end.sql
+
+Restore database:
+$ mysql --user='saul' -p\
+rookery < /tmp/rookery-ch4-end.sql
+
+Alter table ADD column;
+>ALTER TABLE table_name
+ADD COLUMN column_name INT;
+	- Add a column 'order_id' to the table bird_families.
+
+How to copy a table:
+>CREATE TABLE database.table_name LIKE original_table_name;
+	- Create a table with the same structure for the original.
+
+>CREATE TABLE database.table_name
+SELECT * FROM database.original_table;
+	- Create a table with content from the original, without the structures
+	  of AUTOINCREMENT and PRIMARY KEY.
+
+>INSERT INTO database.table_name
+SELECT * FROM database.original_table;
+	- Copy the content from the original table, once used the statement that
+	  create a table with the same structure.
+
+How to erase a table:
+>DROP TABLE table_name;
+
+How to erase a column:
+< ALTER TABLE table_name
+DROP COLUMN column_name;
+
+Creating a column in specific position:
+>ALTER TABLE table_name
+ADD COLUMN column_name CHAR(2) AFTER wished_column;
+	- "whished_column" is the place where create the new column is required.
+	- Use FIRST keyword whithout a name insted of AFTER, to include a column
+	  in the first position.
+
+Disclamer: ALTER TABLE is statemet, ADD COLUMN is a clause, FIRST is a keyword.
+	
+Creating columns in the same statement:
+>ALTER TABLE table_name
+ADD COLUMN column_name AFTER column_before,
+ADD COLUM binary_column BIT DETAULT b'1' AFTER column_before;
+CHANGE COLUMN column_name new_or_same_column_name TYPE(000); 
+	- Should be specify each column for a ADD or CHANGE clause and provide
+	  de fully information name and data type.
+	- 'AFTER' keyword, include a new column after especified column in the
+	  statement.
+	- CHANGE is a clause that changes: the name, type, position, etc, from
+	  a column.
+	- BIT DEFAULT set a column to type BIT (1 or 0), in this case the column
+	  is being set to '1'.
+ 
+DISCLAIMER: The Mysql statement proccess the information in same order from it.
+Therefore, it's possible include column after other in the same statement, even
+doesn't exist before.
+
+Update some fields;
+>UPDATE table_name SET field_name = (content/value)
+ WHERE table_field IN(1,2,4,5);
+	-UPDATE statement require to describe table em field using 'SET'clause
+	appoint that field will be changed.
+	-WHERE indicates what rows will be input or set data, based in the field
+in previous condition.
+
+Select field whithin or not values:
+>SELECT field_name, field_name2, ..., 
+ FROM table_name 
+ WHERE field_name \G
+	- WHERE, indicate where is the condition to sort data and only specify
+	  the fild name is means that only the rows has been data. To retrive
+	  rows with empty fields use 'WHERE NOT' and specify the field.
+
+DISCLAMER: To enumarate a list it's require than field must be not empty.
+
+Modify a column and input an enumerate smal list.
+>ALTER TABLE table_name MODIFY COLUMN column_name ENUM('item1', 'item2', '...')
+AFTER column_name_position;
+	- MODIFY clause don't accept change name column.
+	- To include an item list, is must type the complete list in another
+	  statement clause, ALTER TABLE, MODIFY.
+
+Input data and creating a small list into a same row.
+>INSERT TO table_name
+ (name_fiel_id, filed_name1, field_list_name)
+ VALUES(LAST_INSERT_ID(), "Content 1", 
+ COLUMN_CREATE('1', 'content1, '2', 'content2', '3', '.....'));
+	- To insert the list it's necessary to create a fild whit BLOB format.
+
+Update a column whith a list.
+>UPDATE table_name SET field_name =
+ (COLUMN_CREATE('1', 'first_item', '2', 'second_item', '3', 'third_item', '4',
+'forth_item',)) WHERE = reference_field_name_id = identification_content;  
+
+Retrieveing data from a dinamic column:
+>SELECT COLUMN_GET(field_name, number_position_retreived, AS CHAR)
+ AS 'prefered_name_for_exibition'
+ FROM table_name
+ WHERE reference_fiel_name_id = positon_id;
+
+Insert data in date field whith date type:
+>INSERT INTO table_name(field name, field_name_typed_data)
+ VALUES(content1, NOW());
+	- Command NOW, insert date from computer time.
+
+Retrive data from dinamic column whith label and count:
+>SELECT IFNULL(COLUMN_GET(dinamic_column_field_name, fiel_name_second_table AS
+CHAR), 'name_label')
+ AS 'Label_to_first_column' COUNT(*) AS 'Second_column_label'
+ FROM second_table
+ JOIN first_table USING(field_id)
+ WHERE table1_field_id = number_position
+ AND table2_field_id = number_position
+ GROUP BY field_classification WITH ROLLUP;
+	- IFNULL - search for more informatation
+	- COLUMN_GET, unpak dinamic column in vertical and create a name label
+	  for the last roll, with the total addition
+	- AS - Make the column's name and COUNT the second field.
+	- GROUP BY - Group the cast in especific field referential
+	- WITH ROLLUP - seach for more information 
+
+Creating a table with auto increment key:
+>CREATE TABLE table_name(field_id INT AUTO_INCREMENT PRIMARY KEY, field2);
+
+ALTER a column setting a deafault value:
+>ALTER TABLE table_name
+ CHANGE COLUMN field_name new_field_name TYPE DEFAULT 'content';
+	Or can be done like that to.
+>ALTER TABLE table_name ALTER field_name SET DEFAULT 'content';
+	-This only change the default value, without set the type or name field.
+
+Statement for show a column from a table:
+>SHOW COLUMNS FROM table_name LIKE 'field_name' \G
+
+Reset default value from a field:
+>ALTER TABLE table_name ALTER field_name DROP DEFAULT;
+
+
+Setting the Value of AUTO_INCREMENT:
+Get the value:
+>SELECT auto_increment FROM information_schema.tables
+WHERE table_name = 'wish_table_name'
+	- The result will be the number of the next row, if the table have 5
+	  rows with data, the number will be 6. And the number was not created
+or set when the table was created,thus by default the firsdt number of the
+AUTO_INCREMETN is 1.
+
+Changing the number:
+	ALTER TABLE table_name.database_name AUTO_INCREMENT = 10;
+

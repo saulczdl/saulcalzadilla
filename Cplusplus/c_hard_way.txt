@@ -1,0 +1,21 @@
+UC = Undefined Behavior
+
+ex1.c
+Breaking It Down the code:
+	Row 1 - An include, import the contentes into this source file using .h
+extensions. 
+	Row 3 - Multiline comment, start with /* then after many lines, finish
+with */
+	Row 4 - A more complex version of the 'main' function. For the function
+to be complete it needs to return an 'int' and take two parameters: an 'int' for
+the argument count and array of char * strings for the arguments.
+	Row 5 - To star a body of any function '{', indicates the beginning of a
+block. 
+	Row 6 - AA variable declaration and assignment at the same time. In C,
+statements (except for logic) en in a ';'.
+	Row 8 - Another kind o coment, for a single row. '//'
+	Row 9 - Fuction 'printf'.
+	Row 11 - A return from the 'main' function that the (OS) your exit value.
+	Row 12 - The end of 'main' function with '}', end that's the end of
+program.
+

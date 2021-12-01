@@ -1,0 +1,132 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fmodern\fcharset0 Courier;\f2\froman\fcharset0 Times-Roman;
+}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\paperw11905\paperh16837\margl1440\margr1440\vieww32320\viewh13960\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs32 \cf0 Cria usu\'e1rio para FTP\
+\pard\pardeftab720\sl280\partightenfactor0
+
+\f1\fs24 \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 sudo useradd -m -c \'93Saul, Calzadilla\'94 -s /bin/bash gabriel\
+\
+sudo passwd saul\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs32 \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 Instalar pacote\
+\pard\pardeftab720\sl280\qj\partightenfactor0
+
+\f1\fs24 \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 sudo apt-get update\
+sudo apt-get install vsftpd\
+\
+\pard\pardeftab720\sl280\qj\partightenfactor0
+
+\f2 \cf2 Uma vez conclu\'edda a instala\'e7\'e3o, o servi\'e7o estar\'e1 desativado inicialmente. Portanto, precisamos inici\'e1-lo manualmente pelo tempo m\'e9dio e tamb\'e9m ativ\'e1-lo para iniciar automaticamente a partir do pr\'f3ximo boot do sistema.\
+\pard\pardeftab720\sl280\partightenfactor0
+\cf2 \
+\pard\pardeftab720\sl280\qj\partightenfactor0
+\cf2 No\'a0
+\b Systemd
+\b0 :\
+\pard\pardeftab720\sl280\partightenfactor0
+\cf2 \
+\pard\pardeftab720\sl280\partightenfactor0
+
+\f1 \cf2 systemctl start vsftpd\
+systemctl enable vsftpd\
+\
+depois criar copia do arquivo de configura\'e7\'e3o\
+cp /etc/vsftpd.conf /etc/vsftpd.conf.orig\
+\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs32 \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 Liberar portas no Firewall
+\f1\fs24 \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 \
+\pard\pardeftab720\sl280\partightenfactor0
+\cf2 ufw allow 20/tcp\
+ufw allow 21/tcp\
+\pard\pardeftab720\sl280\partightenfactor0
+\cf2 \outl0\strokewidth0 ufw allow 990/tcp\
+ufw allow 40000:50000/tcp\
+\pard\pardeftab720\sl280\partightenfactor0
+\cf2 \outl0\strokewidth0 \strokec2 \
+sudo ufw status\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs32 \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 Editar arquivo do apche, caso queira\
+\pard\pardeftab720\sl280\partightenfactor0
+
+\f1\fs24 \cf2 \expnd0\expndtw0\kerning0
+vi /etc/apache2/apache2.conf\
+vi /etc/apache2/sites-available/000-defaut.conf ou default.conf\
+\cf2 \outl0\strokewidth0 \strokec2 systemctl restart apache2\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs32 \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+Permiss\'f5es da pasta para o FTP
+\f1\fs24 \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 \
+\pard\pardeftab720\sl280\partightenfactor0
+\cf2 chown nobody:nogroup / var/www\
+chown saul:saul /var/www\
+chgrp -R www-data /var/www\
+chmod -R /777 ou 755 ou 022 /var/www\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs32 \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 Editar arquivo vsftpd.conf com o Vi\
+\pard\pardeftab720\sl280\partightenfactor0
+
+\f1\fs24 \cf2 \expnd0\expndtw0\kerning0
+vi /tec/vsftp.conf\
+	ativar linha write_enable-YES\
+	chroot_local_user=YES\
+adicionar linhas\
+	user_sub_token=$USER (cria token para usu\'e1rio)\
+	local_root=/var/www (pasta raiz do Ftp)\
+	\
+	pasv_min_port=40000 (Ftp passivo, configura\'e7\'e3o de portas)\
+	pasv_max_port=50000
+\f0\fs32 \cf0 \kerning1\expnd0\expndtw0 	
+\f1\fs24 \cf2 \expnd0\expndtw0\kerning0
+\
+\pard\pardeftab720\sl280\partightenfactor0
+\cf2 \outl0\strokewidth0 \strokec2 	\
+	userlist_enable=Yes (aceita lista de usuarios)\
+	userlist_file=/etc/vsftpd.userlist\
+	userlist_deny=NO (permite usu\'e1rios)\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs32 \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 Criar Lista de Usu\'e1rios:
+\f1\fs24 \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 \
+\pard\pardeftab720\sl280\partightenfactor0
+\cf2 	echo \'93saul\'94 | sudo tee -a /etc/vsftpd.userlist\
+	cat /etc/vsftpd.userlist\
+(ou via VI)\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs32 \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 Permi\'e7\'e3o de escrita na pasta do FTP\
+\pard\pardeftab720\sl280\partightenfactor0
+
+\f1\fs24 \cf2 \expnd0\expndtw0\kerning0
+chmod a-w /var.www (permiss\'e3o de escrita)\
+
+\f0\fs32 \cf0 \kerning1\expnd0\expndtw0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 Reiniciar o FTP
+\f1\fs24 \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 \
+\pard\pardeftab720\sl280\partightenfactor0
+\cf2 systemctl restart vsftpd\
+\
+	}
