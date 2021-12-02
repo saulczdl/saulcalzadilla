@@ -200,11 +200,29 @@ Setting the Value of AUTO_INCREMENT:
 Get the value:
 >SELECT auto_increment FROM information_schema.tables
 WHERE table_name = 'wish_table_name'
+	- 'table_name' is literaly the name of the field.
 	- The result will be the number of the next row, if the table have 5
-	  rows with data, the number will be 6. And the number was not created
+rows with data, the number will be 6. And the number was not created
 or set when the table was created,thus by default the firsdt number of the
 AUTO_INCREMETN is 1.
 
 Changing the number:
-	ALTER TABLE table_name.database_name AUTO_INCREMENT = 10;
+>ALTER TABLE table_name.database_name AUTO_INCREMENT = 10;
+	- Change the auto increment number to 10. 
+	- In a scenario wich has necessary copy a table from another with
+	  including the content, a slightly diference between the new and the
+older table is the auto increment number. Despite from the older talble, the new
+table has the counter number of auto increment set by 0. Then it's require to set
+to current value for the same of older table.
+	- In MariaDB the Auto_Incrente Value is the same of the older table.
+
+Create a table from other using some columns.
+>CREATE TABLE new_table_name SELECT field_name_id, field_name_2 FROM
+ orign_table_name;
+	- The layout and content of original fields it were copied, except the
+configuration of PRIMARY_KEY and AUTO INCREMENT.
+
+Delete a column:
+>ALTER TABLE table_name DROP COLUMN column_name;
+
 
