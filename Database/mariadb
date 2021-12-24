@@ -1,0 +1,5 @@
+sudo docker start mariadb1
+
+sudo docker exec -it mariadb1 bash
+
+

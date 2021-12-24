@@ -3,16 +3,16 @@ A simple file with writeble to reinforce my study.
 Run Docker instance: 
 
 $sudo systemctl docker status
-	- if it is running, run the command for start that container that have
+	- If it is running, run the command for start witch container that have
 	  it the database:
 
 $sudo docker start mariadb1
-	- aftar start the container, the prompt will shown "mariadb1", which
+	- After start the container, the prompt will shown "mariadb1", which
 	  means the server is online. Now you can access de comand line inside
 	  of database. Juas run the command as follow. 
 
 $sudo docker exec -it mariadb1 -mysql -u saul -p
-	- after inform the password you already conected with the server.
+	- After input password you already conected with the server.
 
 $sudo docker exec -it mariadb1 bash
 	- makes you access the bash of container and run commands like "mysql",
@@ -59,7 +59,7 @@ $mysqldump --user 'saul' -p \
 rookery > /tmp/rookery-ch4-end.sql
 
 Restore database:
-$ mysql --user='saul' -p\
+$ mysql --user='saul' -p \
 rookery < /tmp/rookery-ch4-end.sql
 
 Alter table ADD column;
@@ -85,8 +85,8 @@ How to erase a table:
 >DROP TABLE table_name;
 
 How to erase a column:
-< ALTER TABLE table_name
-DROP COLUMN column_name;
+>ALTER TABLE table_name
+->DROP COLUMN column_name;
 
 Creating a column in specific position:
 >ALTER TABLE table_name
@@ -100,7 +100,7 @@ Disclamer: ALTER TABLE is statemet, ADD COLUMN is a clause, FIRST is a keyword.
 Creating columns in the same statement:
 >ALTER TABLE table_name
 ADD COLUMN column_name AFTER column_before,
-ADD COLUM binary_column BIT DETAULT b'1' AFTER column_before;
+ADD COLUMN binary_column BIT DETAULT b'1' AFTER column_before,
 CHANGE COLUMN column_name new_or_same_column_name TYPE(000); 
 	- Should be specify each column for a ADD or CHANGE clause and provide
 	  de fully information name and data type.
@@ -164,7 +164,7 @@ Insert data in date field whith date type:
 	- Command NOW, insert date from computer time.
 
 Retrive data from dinamic column whith label and count:
->SELECT IFNULL(COLUMN_GET(dinamic_column_field_name, fiel_name_second_table AS
+>SELECT IFNULL(COLUMN_GET(dinamic_column_field_name, field_name_second_table AS
 CHAR), 'name_label')
  AS 'Label_to_first_column' COUNT(*) AS 'Second_column_label'
  FROM second_table
@@ -207,14 +207,14 @@ or set when the table was created,thus by default the firsdt number of the
 AUTO_INCREMETN is 1.
 
 Changing the number:
->ALTER TABLE table_name.database_name AUTO_INCREMENT = 10;
+>ALTER TABLE database_name.table_name AUTO_INCREMENT = 10;
 	- Change the auto increment number to 10. 
 	- In a scenario wich has necessary copy a table from another with
 	  including the content, a slightly diference between the new and the
-older table is the auto increment number. Despite from the older talble, the new
-table has the counter number of auto increment set by 0. Then it's require to set
-to current value for the same of older table.
-	- In MariaDB the Auto_Incrente Value is the same of the older table.
+older table, The new table has the counter number of auto increment set by 0
+despite for the old_table, then it's necessary to set the current value for the
+same of older table.
+	- In MariaDB the Auto_Incrent Value is the same of the older table.
 
 Create a table from other using some columns.
 >CREATE TABLE new_table_name SELECT field_name_id, field_name_2 FROM
@@ -224,5 +224,343 @@ configuration of PRIMARY_KEY and AUTO INCREMENT.
 
 Delete a column:
 >ALTER TABLE table_name DROP COLUMN column_name;
+	- This clause delete the column and the data inside it.
 
+Renaming a table:
+>RENAME TABLE table_name_original TO table_name_new;
+	- If the new name doesn't exist in the database, will be change the
+	  name, ubstead, the still unchange and the table with the same name,
+won't overwrite. A message error will be displayed.
+	- The RENAME TABLE statement can also be used to move a table to another
+	  database. Therefore, it's possible rename and relocate a table it to a
+different database. 
+	- Let's do this in the follow statement, adding rename the older table
+	  and move the new table from another database.
+
+>RANAME TABLE current_database.actual_table TO
+>current_database.actual_table_old, test_database.table_new TO
+ current_database.actual_table_new
+	- If there was a problem in doing any of these changes, an error
+	  messeage will be dysplay and none of the changes would be made.
+
+Searching a table by specific name:
+>SHOW TABLES IN database_name LIKE 'part_of_table_name';
+
+Delete a Table:
+>DROP TABLE table_name;
+
+Limit results:
+>SELECT * FROM table_name LIMIT 'results_number';
+
+
+Order by Alter Table:
+>ALTER TABLE table_name ORDER BY field_name;
+	-Doesn't work on MariaDB. Insted I do with the SELECT statement and
+limit results.
+>SELECT * FROM table_name ORDER BY field_name LIMIT 'results_number';
+
+Indexes:
+
+	When the database looking into de rows of several tables, if it has to
+search row by row in all of tables, it took so long. Therefore, a index it's
+create to the searches become more fast. To show a index of a table, following
+the statement.
+
+>SHOW INDEX FROM database_name.table_name \G
+
+To explain and return the information on how the SELECT statement searches the
+table and on what basis.
+>EXPLAIN SELECT * FROM database_name.table_name WHERE field_name =
+ 'information_required';
+	- Were used a specific field whith a determinate clause.
+
+To prepare two fields/columns, combines theirs to an index: 
+>ALTER TABLE database_name.table_name ADD INDEX new_index_name (fiel_1,
+ field_2);
+
+To see information about an index, follow the statement:
+>SHOW INDEX FROM database_name.table_name WHERE Key_name = 'index_name_created'
+->\G
+	- Key_name is a specfic information cast by the statement SHOW INDEX.
+	- The WHERE condition restrict to only results with a specific name key.
+
+*******//******
+For the index, its necessary read de pages 110-113. There is a plenty
+information about of the index works. A little far idea about like searchers
+(Google) does works, creating a several indexes in a pratical way to get better
+and better aswers for the users. Perhaps automatic indexers in some code
+language does the job.
+*******//******
+
+For change a column name which was an index, it's necessary to remove the index
+and after change the name. So latter, create a nem index based in the new
+column.
+>ALTER TABLE table_name DROP PRIMARY KEY,
+->CHANGE old_column_name new_column_name INT PRIMARY KEY AUTO_INCREMENT;
+	- This it's possible to do in the same one statement.
+
+
+Note: The Primary Key, is the index of the table.
+
+------------------------Exercise page 116:
+
+Explain this next statement. Which delete an old INDEX, then creates a new in
+the same statement.
+ >ALTER TABLE database.table_name DROP INDEX index_name, ADD UNIQUE
+->new_index_unique (column_1, column_2, column_...);
+	- DROP INDEX must specify by name.
+	- ADD UNIQUE create an INDEX for two columns
+
+--------------------------- CHAPTER 6 -------------------------------------
+
+--------- The Syntax -------- page 121
+
+Standart syntax od insert statement:
+ >INSERT INTO table_name [(column_name, ...)]
+->VALUES (value, ...),(...), ...;
+
+
+Altered table 'books' and insert data, despite recomendation from page 121.
+
+
+To check an field_id to after enter a number of the name reference in another
+table.
+ >SELECT name_id FROM table_origin
+->WHERE field_name = 'Name_required';
+
+
+To insert a values into a complet row: -- page 125
+ >INSERT INTO table_name
+->VALUES(field_1_number, 'field_2', "fiel_3", field_4_number);
+
+DISCLAIMER: INSERT statement in MariaDB don't accept VALUES out of order table's
+fields without before describe these fiels in parentheses into sequence.
+
+ >SHOW WARNINGS \G
+	- Shows the warnings of the last statement that return the massage '1
+	  warning (0.00 sec)'.
+
+
+To delete a row by an id_field.
+ >DELETE FROM table_name WHERE field_id = number_id;
+
+To insert data in a different order from how it's structured in the table:
+ >INSERT INTO table_name(field_2, field_4, field_3)
+->VALUES('field_2', field_4_number, "field_3");
+
+Retrieve or getting information from a table sort by an especific field.
+ >SELECT fiel_1, field_2 FROM table_name ORDER BY wanted_fiel_name;
+
+To show some column from a table with a determined pattern or based on it:
+
+ >SHOW COLUMNS FROM table_name LIKE '%pattern';
+
+To get all information of the colluns from a table:
+ >SHOW FULL COLUMNS FROM table_name;
+
+
+Select data from various tables:
+ >SELECT field_name_1 AS 'Label_1',
+->table_name_1.field_name_1 AS 'Label_2',
+->table_name_2.field_name_1 AS 'Label_3',
+->table_name_2.field_name_2 AS 'Label_4',
+->FROM table_name, table_name_1, table_name_2
+->WERE table_name.field_id_1 IS NULL
+->AND table_name_1.field_id_2 = table_name_2.field_id_1;
+	- The first field don't require describe table's name, just isn't have
+	  the same name whitch the others. For another fields must describe,
+that fields its for reference and to avoid ambiguity.
+	- The clause 'AS' its just a label to show whem MYSQL cast the SELECT
+	- WHERE clase, build the reference to the three tables. Create a
+	  relation between the first table and de second by the field_id, then
+make a seconde relation in 'AND', between the second table and third.
+	- CLAUSE "IS NUL" indicates that field must be NULL
+
+Insert emphatically:
+ >INSERT INTO table_name SET field_1 = 'Content_1', field_2 = 'Content_2';
+	- Anothe way to insert data. This insert one row at a time and  set
+	  data to only a especific column, this way isn't possible insert data
+din a wrong column, even the table has change from the original layout.  
+
+
+Insert data, ingnoring warnings:
+ >INSERT INGNORE INTO table_name
+->(fiel_1, fiel_2, field_3)
+->SELECT field_1, field_2, field_3
+->FROM source_table_name;
+
+--------------------------- Page 134 ----------------------------------
+Retrive data with limit recordes and ordered in descending order:
+ >SELECT * FROM table_name
+->ORDER BY fiel_name DESC LIMIT 0;
+
+Select with no repeat results:
+ >SELECT DISTINCT field_1 AS 'Label_1',field_2 AS "Label '2'" 
+->FROM table_name
+->WHERE field IS NULL
+->AND field_1 = table_name.field_X LIMIT 0;
+	- Condition NULL makes a condition only rows that "fiel" is NULL
+	- AND, add a second condition to filter the rows, based in the same
+	  content between the fields.
+
+--------------------------- Page 135 ----------------------------------
+Update Statement
+ >UPDATE table_name_1, table_name_2
+->SET table_name1.field_from_table_2 = table_name_2.field_id
+->WHERE table_name_1.field_from_table_2 IS NULLL
+->AND field_X = table_name_2.field_X;
+	- UPDATE use the "SET" to change the column with or not a clause WHERE
+	  and AND.
+
+Select with condition:
+ >SELECT * FROM table_name
+->WHERE field_name = 'condition';
+
+-------------------------- Page 136 ---------------------------------
+Change the table bird_orders, add new order 'Suliformes' and updated it in
+bird_families.
+
+
+Replace Statement:
+ >REPLACE INTO table_name
+->(field_1, field_2, fiel_3)
+->VALUES(..., ..., .,,,),
+->(..., ..., ...);
+	- Replace rows with the same content, without return erros by duplicate
+	  fields. Despite from reject the statement, any rows with the samy key
+value will replace the matching row already in the table. 
+	- REPLACE statement, delete completely a row and the new row is then
+	  inserted. It repleces the whole row. To change specific columns, use
+the UPDATE statement.
+	- Only works whit UNIQUE fields, otherwise new rows would be created
+
+-------------------------- Page138 ---------------------------------
+Priorities When Inserting Data -----
+	- Statements that change data(INSERT, UPDATE and DELETE) take priority over read statements (SELECT).
+
+
+Lowering the priorityof an insert:
+ >INSERT LOW_PRIORITY INTO table_name(...
+	- This is an abbreviated version of the statement.
+	- This flag puts the insert statement in a queue, even new requests are made, they put ahead of it in the queue.
+	- The table is locked while the INSERT statement, and it mustbe  wait until complete before another requests.
+	- LOW_PRIORITY and HIGH_PRIORITY aren't supported by InnoDB tables. It's unnecessary bacause it doesn't lock the table, but locks the relevant rows.
+ 
+
+Delaying an INSERT
+ >INSERT DELAYED INTO table_name...
+	- This is deprecated in 5.6.6 of MySQL.
+	- Puts the INSERT into a queue and the Delayed requests are batched
+	  together for block insertion when there is a gap in server trafic.
+	- The mysql-client is released and the INSERT keeps in memory's server
+	  until be processed, just if the server non be stopped or kill.
+
+
+Raising the priority of an INSERT:
+	- In case of the default priority on the server, were be configured by
+	  LOW or DELAY, add the HIGY_PRIORITY flag on INSERT statement, makes
+the server process override. Follow the defaulf rule INSERT, UPDATE and DELETE
+before SELECT statements.
+
+-------------------------------- page 142 --------------------------------------
+In the Exercises isn't news. Only input data and replace. Using the concepts
+form the chapter.
+
+---------------------------------- page 145 -----------------------------------
+CHAPTER 7 - Selecting Data
+
+Basic Syntax:
+ >SELECT column_name FROM table_name;
+For all columns:
+ >SELECT * FROM table_name;
+For some columns;
+ > SELECT column_1, column_2, columm.... FROM table_name;
+
+------------------------------- Page 147 -------------------------------------
+Selecting by a Criteria
+ >SELECT field_1, field_2
+->FROM table_name WHERE field_name = 'specific_content'
+LIMIT 0;
+	- Only for remember, this statement already seeing before.
+
+---------------------------- Page 148 ---------------------------------------
+Ordering Results:
+ >SELECT field_1, field_2 FROM table_name
+->WHERE field_name = 'specific_content'
+->ORDER BY fiel_1 LIMIT 0;
+	- Statemen already aproach. 
+	- In the case of the  'specific_content it be a number, the better
+	  pratice isn't use quotes around numeric values. They can affect
+performance and cause incorrect results if mixed with strings.
+
+ >SELECT field_1, field_2
+->FROM table_name 
+->WHERE field_name IN(specific_content_1, specific_content_2, ... )
+->ORDER BY fiel_1 LIMIT 0;
+	- IN operator with the list in parentheses, search by the values wished,
+	  not by only one. Not like the '=', wich search by only one content.
+	- In the case of the  'specific_content it be a number, the better
+	  pratice isn't use quotes around numeric values. They can affect
+performance and cause incorrect results if mixed with strings.
+
+ 
+WHERE clause with logical AND operator
+ >SELECT field..... FROM table_name
+->WHERE field_name_1 IN(..., ..., ...)
+->AND field_name_2 != ''
+ORDER BY field LIMIT 0;
+	- ADD, add one more condition.
+	- != is the same that 'not equal'
+	- '', means to consider a empty string reather than NULL fiel. It could
+	  be used to <>.
+
+---------------------------- page 151 -------------------------------------
+Limiting Results
+->LIMIT 0, 3;
+	- It's the same (LIMIT 3;), The first number (0) tells to MYSQL, where to begin and the last number (3), tells until row display from the query.
+
+Combining Tables:
+
+ >SELECT field_1 AS 'Label_1, field_2 AS 'Label_2'
+->FROM table_1, table_2
+->WHERE  table_1.field_id = table_2.field_id
+->AND field_id = 'wished content'
+->AND field_name != ''
+->ORDER BY field_name LIMIT 0;
+	- The WHERE clause indicates that the same field_id must to be equal, but are distintic in each table. Because this, they are type together the tables.
+	- Add an AND only increase the filter or conditon of the query.
+	- Select with 'AS', it's just a label and two fields from two tables one
+	  for each. Though to avoid abiguity should type the name of the table and the name of the field, with a dot.
+
+Provide an alias for big names table:
+ >SELECT field_1 AS 'Label_1, shot_name_table.field_2 AS 'Label_2'
+->FROM table_1, table_2 AS short_name_table_2
+->WHERE  table_1.field_id = short_name_table_2.field_id
+->AND field_id = 'wished content'
+->AND field_name != ''
+->ORDER BY field_name LIMIT 0;
+	- The alias for a table, it's only for decrease the sintaxe, when the
+	  name of the table is too large. The aliases for table names must not
+be in quotes.
+
+ >SELECT field_1 AS 'Label_1, 
+->table_2.field_2 AS 'Label_2', 
+->table_3.field_3 AS 'Label_3'
+->FROM table_1, table_name_2 AS table_2, table_name_3 AS table_3
+->WHERE  table_1.field_id = table_2.field_id
+->AND table_2.field_id = table_3.field_id
+->AND field_id = 'wished content'
+->AND field_name != ''
+->AND field_name IN('content_1', 'content_2', 'content_3')
+->OR fiel_name LIKE 'Patern%'
+->ORDER BY field_name LIMIT 10, 5;
+	- 3 tables, 2 of them  with alias. The AND syncronize the second table to
+the third tebla. The SELECT shows 3 fields from 3 tables each.
+	- LIMIT clause brings five rows from the tenth.
+	- For myself I include the logical condition OR to request more rows
+	  after fiter the results with the IN request for some rows. This way,
+will be shows rolls without my patter and the previous conditions.
+
+------------------------------ page 154 ------------------------------------
+Expressions and the Like
 

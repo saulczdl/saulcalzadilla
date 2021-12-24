@@ -1,0 +1,3 @@
+After install Pulse Effects to enable Equalizer:
+
+sudo apt install -y lsp-plugins

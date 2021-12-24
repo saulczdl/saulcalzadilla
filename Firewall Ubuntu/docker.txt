@@ -1,0 +1,11 @@
+Docker Commands:
+
+Get a debian container:
+#docker pull debian
+
+$sudo docker run -i -t debian /bin/bash
+
+
+Create and instal a Mariadb image:
+https://mariadb.com/kb/en/installing-and-using-mariadb-via-docker/
+

@@ -1,4 +1,17 @@
+Install in linux:
+Shell commmand:
+$sudo apt-get install build-essential
+
+Check version:
+$cc --version
+
+How to compile:
+$make name_of_file_without_c_extension
+
+
 UC = Undefined Behavior
+
+Exercise 1 --page 29 ----------------------------------------------------------
 
 ex1.c
 Breaking It Down the code:
@@ -18,4 +31,56 @@ statements (except for logic) en in a ';'.
 	Row 11 - A return from the 'main' function that the (OS) your exit value.
 	Row 12 - The end of 'main' function with '}', end that's the end of
 program.
+
+Read the 'man 3 printf', and make notations/jot the symboms with guess about the
+means it.
+
+Exercise 2 Using Makefiles to Build --page 32 ---------------------------------
+
+Use Make:
+	$make program_name
+
+	# or do that another way:
+	$CFLAGS="-Wall" make program_name
+
+	- The Make program Build by steps, check if exist another file with the
+	  same name. If no, check by another file that starts whith the same
+name. If yes and called with the same name and have it the extension ".c". If
+yes check to build ",c" files. If yes, run the command "cc program_name.c -o
+name_program" and build the file program_name.
+
+	- The second command, makes the environment variable only
+	  while that commands runs. If you want to set the virable, just
+export by this command "export CFLAGS="-Wall", without type before.
+	- This means that command line option tell the compiler cc to report all
+	  warnings.
+
+
+Extra Credit --page 34 --------------------------------------------------------
+
+	Improve the 'Makefile'
+
+	When there is a make file, that automatize the commands for compile it's
+ofly necessary run the command.
+
+$make
+
+	To do this way, the Makefile must be configured like this:
+
+CXXFLAGS=-Wall -g
+
+all: any_name
+
+any_name:
+        rm -f ex1
+        make ex1
+        ./ex1
+
+
+Exercise 3 -- Formatted Printing -----------------------------------------------
+
+Stopped at page 35 Extra Credit
+-I must read man: printf, make and cc (-wall and -g)
+
+
 
